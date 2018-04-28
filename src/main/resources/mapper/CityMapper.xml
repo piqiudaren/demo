@@ -10,7 +10,7 @@
         code, name, url, parentId
     </sql>
 
-    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
         <selectKey  resultType="java.lang.Long"  order="AFTER"  keyProperty="id">
             SELECT LAST_INSERT_ID()  AS  id
         </selectKey>
