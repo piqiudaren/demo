@@ -11,9 +11,6 @@
     </sql>
 
     <insert id="insertBatch"  useGeneratedKeys="true" keyProperty="id">
-        <selectKey  resultType="java.lang.Long"  order="AFTER"  keyProperty="id">
-            SELECT LAST_INSERT_ID()  AS  id
-        </selectKey>
         insert into town (<include refid="Base_Column_List" />)
         values
         <foreach collection="list" item="item" index="index"  separator=",">
