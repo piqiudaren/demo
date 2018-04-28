@@ -6,6 +6,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.Random;
 
 public class RequestAndResponseTool {
 
+    private static final Logger logger = LogManager.getLogger(RequestAndResponseTool.class);
 
     public static Page  sendRequstAndGetResponse(String url) throws InterruptedException {
         long a = (long)(Math.random()*1000);
@@ -33,7 +36,7 @@ public class RequestAndResponseTool {
             int statusCode = httpClient.executeMethod(getMethod);
             // 判断访问的状态码
             if (statusCode != HttpStatus.SC_OK) {
-                System.err.println("Method failed: " + getMethod.getStatusLine());
+                logger.info("Method failed: " + getMethod.getStatusLine());
             }
             // 4.处理 HTTP 响应内容
             byte[] responseBody = getMethod.getResponseBody();// 读取为字节 数组
@@ -41,7 +44,8 @@ public class RequestAndResponseTool {
             page = new Page(responseBody,url,contentType); //封装成为页面
         } catch (HttpException e) {
             // 发生致命的异常，可能是协议不对或者返回的内容有问题
-            System.out.println("Please check your provided http address!");
+            logger.error("错误url:"+url);
+            logger.error("Please check your provided http address!");
             e.printStackTrace();
         } catch (IOException e) {
             // 发生网络异常

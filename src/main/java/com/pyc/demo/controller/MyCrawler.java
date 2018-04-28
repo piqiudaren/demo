@@ -209,11 +209,8 @@ public class MyCrawler {
                     county.setUrl(href);
                     county.setName(name);
                     county.setCode(code);
-                    if ("省直辖县级行政区划".equals(city.getName()) || "市辖区".equals(city.getName())) {
-                        county.setParentId(city.getParentId());
-                    }else {
-                        county.setParentId(city.getId());
-                    }
+                    county.setParentId(city.getId());
+
                     countyList.add(county);
                 }
                 if (countyList != null && countyList.size() >0) {

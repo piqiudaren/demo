@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="projectName">ci-storage</Property>
+		<Property name="logDir">../logs/${projectName}</Property>
+		<Property name="logPattern">[${projectName}][%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level ${sys:PID} --- [%t] %C.%M(%L) : %m%n</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+		</Console>
+		
+		<RollingFile name="RollingFile" fileName="${logDir}/${projectName}.log" filePattern="${logDir}/$${date:yyyy-MM}/${projectName}-%d{yyyy-MM-dd-HH-mm}-%i.log">
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="30" />
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="1000" />
+		</RollingFile>
+		
+		<RollingFile name="ExceptionFile" fileName="${logDir}/${projectName}-error.log" filePattern="${logDir}/$${date:yyyy-MM}-error/${projectName}-error-%d{yyyy-MM-dd-HH-mm}-%i.log">
+			<PatternLayout>
+				<Pattern>${logPattern}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="30" />
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="1000" />
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+			<AppenderRef ref="ExceptionFile" />
+		</Root>
+	</Loggers>
+</Configuration>
