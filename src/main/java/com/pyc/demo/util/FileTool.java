@@ -38,7 +38,7 @@ public class FileTool {
      * */
     private static void mkdir() {
         if (dirPath == null) {
-            dirPath = Class.class.getClass().getResource("/").getPath() + "temp1\\";
+            dirPath = Class.class.getClass().getResource("/").getPath() + "temp\\";
         }
         File fileDir = new File(dirPath);
         if (!fileDir.exists()) {
