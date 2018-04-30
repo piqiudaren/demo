@@ -1,9 +1,7 @@
 package com.pyc.demo.page;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.*;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.logging.log4j.LogManager;
@@ -23,14 +21,18 @@ public class RequestAndResponseTool {
         Page page = null;
         // 1.生成 HttpClinet 对象并设置参数
         HttpClient httpClient = new HttpClient();
+        httpClient.getParams().setParameter("http.protocol.cookie-policy",
+                CookiePolicy.BROWSER_COMPATIBILITY);
+
         // 设置 HTTP 连接超时 5s
-        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(60000);
         // 2.生成 GetMethod 对象并设置参数
         GetMethod getMethod = new GetMethod(url);
+        getMethod.setRequestHeader(new Header("Connection","Keep-Alive"));
         // 设置 get 请求超时 5s
-        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 5000);
+        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 60000);
         // 设置请求重试处理
-        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(5,true));
         // 3.执行 HTTP GET 请求
         try {
             int statusCode = httpClient.executeMethod(getMethod);
@@ -47,9 +49,12 @@ public class RequestAndResponseTool {
             logger.error("错误url:"+url);
             logger.error("Please check your provided http address!");
             e.printStackTrace();
+           return sendRequstAndGetResponse(url);
         } catch (IOException e) {
+            logger.error("网络异常错误url:"+url);
             // 发生网络异常
             e.printStackTrace();
+           return  sendRequstAndGetResponse(url);
         } finally {
             // 释放连接
             getMethod.releaseConnection();

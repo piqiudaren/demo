@@ -90,7 +90,7 @@ public class MyCrawler {
             }
 
             //根据URL得到page;
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
             Page page = RequestAndResponseTool.sendRequstAndGetResponse(visitUrl);
 
             //对page进行处理： 访问DOM的某个标签
@@ -135,7 +135,7 @@ public class MyCrawler {
             }
 
             //根据URL得到page;
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
             Page page = RequestAndResponseTool.sendRequstAndGetResponse(visitUrl);
 
             //对page进行处理： 访问DOM的某个标签
@@ -185,7 +185,7 @@ public class MyCrawler {
             }
 
             //根据URL得到page;
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
             Page page = RequestAndResponseTool.sendRequstAndGetResponse(visitUrl);
 
             //对page进行处理： 访问DOM的某个标签
@@ -194,7 +194,12 @@ public class MyCrawler {
                 for (Iterator i = es.iterator(); i.hasNext(); ) {
                     Element esa = (Element) i.next();
                     Elements elements = esa.select("a");
-
+                    if(elements.isEmpty()){
+                        Elements elements1 = esa.select("td");
+                        if("市辖区".equals(elements1.last().text())){
+                            continue;
+                        }
+                    }
                     Iterator it =  elements.iterator();
                     Element e1 = (Element)it.next();
                     Element e2 = (Element)it.next();
@@ -236,7 +241,7 @@ public class MyCrawler {
             }
 
             //根据URL得到page;
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
             Page page = RequestAndResponseTool.sendRequstAndGetResponse(visitUrl);
 
             //对page进行处理： 访问DOM的某个标签
