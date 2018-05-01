@@ -3,6 +3,9 @@ package com.pyc.demo.util;
 
 import com.pyc.demo.page.Page;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +15,7 @@ import java.io.IOException;
 public class FileTool {
 
     private static String dirPath;
+    private static final Logger logger = LogManager.getLogger(FileTool.class);
 
 
     /**
@@ -63,7 +67,7 @@ public class FileTool {
             }
             out.flush();
             out.close();
-            System.out.println("文件："+ fileName + "已经被存储在"+ filePath  );
+            logger.info("文件："+ fileName + "已经被存储在"+ filePath  );
         } catch (IOException e) {
             e.printStackTrace();
         }

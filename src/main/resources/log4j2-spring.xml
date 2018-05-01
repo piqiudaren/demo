@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
 	<Properties>
-		<Property name="projectName">ci-storage</Property>
+		<Property name="projectName">demo</Property>
 		<Property name="logDir">../logs/${projectName}</Property>
 		<Property name="logPattern">[${projectName}][%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level ${sys:PID} --- [%t] %C.%M(%L) : %m%n</Property>
 	</Properties>
