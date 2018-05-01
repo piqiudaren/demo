@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 设置log4j2的自身log级别为warn -->
+<!-- OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!-- status 是log4j2自身级别 ，monitorInterval 是30秒检测一次，配置文件是否改动，如果改动就重新加载-->
+<configuration  status="off" monitorInterval="60">
+    <properties>
+    	<!-- 定义参数   name 随意定     用 ${name} 获取-->  
+        <property name="LOG_HOME">../logs</property>
+    </properties>  
+    <!-- 控制台和文件输出配置 -->
+    <appenders>
+    	<!-- 控制台配置，name值 可以随意取，后面用，target是用system.out输出方式，可以改为SYSTEM_ERR -->
+        <console name="Console" target="SYSTEM_OUT">
+        	<!-- 输出格式 -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:(%F:%L) %n - %m%n"/>
+        </console>
+         <!-- 文件输出配置比RollingFile性能好,  name随意，后面用！fileName是日志输出路径和日志名字 -->
+                     <!--filePattern 当达到50M 或文件已过一天 后，会生成新的文件-->
+                     <!-- filePattern %d{yyyy-MM-dd}  每天生成一个新文件，%d{yyyy-MM-dd HH-mm} 每分钟生成一个新文件-->
+ 		 <RollingRandomAccessFile name="RollingFileDebug" fileName="${LOG_HOME}/debug.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log.gz">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->        
+            <Filters>
+	           <ThresholdFilter level="DEBUG"/>
+	           <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <!-- 文件输出格式 -->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:(%F:%L) %n - %m%n"/>
+            <!-- 生成新文件的条件 -->
+            <Policies><!--interval代表二十个时间单位,时间单位由filePattern确定  -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- 文件个数 -->
+            <DefaultRolloverStrategy max="100"/>  
+        </RollingRandomAccessFile>
+ 
+        <RollingRandomAccessFile name="RollingFileInfo" fileName="${LOG_HOME}/info.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log.gz">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->        
+            <Filters>
+	            <ThresholdFilter level="INFO"/>
+	            <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:(%F:%L) %n - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- 文件个数 -->
+            <DefaultRolloverStrategy max="100"/>  
+        </RollingRandomAccessFile>
+ 
+        <RollingRandomAccessFile name="RollingFileWarn" fileName="${LOG_HOME}/warn.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log.gz">
+            <Filters>
+<!--             	<ThresholdFilter level="WARN" onMatch="ACCEPT"  onMismatch="DENY"/> -->
+	           <ThresholdFilter level="WARN"/>
+	           <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:(%F:%L) %n - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+             <!-- 文件个数 -->
+            <DefaultRolloverStrategy max="100"/> 
+        </RollingRandomAccessFile>
+ 
+        <RollingRandomAccessFile name="RollingFileError" fileName="${LOG_HOME}/error.log"
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz"> 
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:(%F:%L) %n - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy  interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+             <!-- 文件个数 -->
+            <DefaultRolloverStrategy max="100"/> 
+        </RollingRandomAccessFile>
+		 <!-- appender to send mails (default: error and fatal events)-->
+        <!--<SMTP name="Mailer"
+              subject="Error log" to="386071267@qq.com" from="13717795774@163.com"
+              smtpHost="smtp.163.com" smtpPort="25"
+              smtpProtocol="smtp" smtpUsername="13717795774@163.com" 
+              smtpPassword="q3798931139Q" smtpDebug="false">
+        </SMTP>-->
+<!--         <SMTP name="Mailer" -->
+<!--               subject="Errorlog" to="jinagjikun@suizhi.com.cn,litengyang@suizhi.com.cn" from="suizhi@pyc.com.cn" -->
+<!--               smtpHost="mail.pyc.com.cn" smtpPort="587" -->
+<!--               smtpProtocol="smtp" smtpUsername="suizhi@pyc.com.cn"  -->
+<!--               smtpPassword="123456" smtpDebug="false" bufferSize="512"> -->
+<!--         </SMTP> -->
+        <!-- appender to send mails asynchronously -->
+        <!--<Async name="AsyncMailer" >
+            <appender-ref ref="Mailer"/>
+        </Async>-->
+       <Async name="AsyncLogFile">
+       		<appender-ref ref="RollingFileDebug"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>  
+       </Async>
+    </appenders>
+    <loggers>
+        <root  level="info">
+            <appender-ref ref="Console"/>
+<!-- 			<appender-ref ref="AsyncMailer"/>  -->
+			<appender-ref ref="AsyncLogFile"/>
+        </root>
+    </loggers>
+</configuration>

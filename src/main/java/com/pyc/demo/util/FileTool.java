@@ -42,7 +42,8 @@ public class FileTool {
      * */
     private static void mkdir() {
         if (dirPath == null) {
-            dirPath = Class.class.getClass().getResource("/").getPath() + "temp\\";
+//            dirPath = Class.class.getClass().getResource("/").getPath() + "temp\\"; //windows
+            dirPath = ".."+File.separator+"temp"+File.separator;
         }
         File fileDir = new File(dirPath);
         if (!fileDir.exists()) {
