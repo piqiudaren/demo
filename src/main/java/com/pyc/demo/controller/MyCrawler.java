@@ -198,6 +198,13 @@ public class MyCrawler {
                         Elements elements1 = esa.select("td");
                         if("市辖区".equals(elements1.last().text())){
                             continue;
+                        }else if ("金门县".equals(elements1.last().text())) {//福建省泉州市金门县，没有下级的县镇单位
+                            County county = new County();
+                            county.setName(elements1.last().text());
+                            county.setCode(elements1.first().text());
+                            county.setParentId(city.getId());
+                            countyList.add(county);
+                            continue;
                         }
                     }
                     Iterator it =  elements.iterator();
