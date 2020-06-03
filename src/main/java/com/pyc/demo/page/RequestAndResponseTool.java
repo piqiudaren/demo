@@ -29,6 +29,8 @@ public class RequestAndResponseTool {
         // 2.生成 GetMethod 对象并设置参数
         GetMethod getMethod = new GetMethod(url);
         getMethod.setRequestHeader(new Header("Connection","Keep-Alive"));
+//        定义了重定向是否应该自动处理。这个参数期望得到一个java.lang.Boolean类型的值。如果这个参数没有被设置，HttpClient将会自动处理重定向。
+        getMethod.getParams().setParameter("http.protocol.allow-circular-redirects", true);
         // 设置 get 请求超时 5s
         getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 60000);
         // 设置请求重试处理

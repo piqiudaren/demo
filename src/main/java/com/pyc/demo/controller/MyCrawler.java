@@ -339,7 +339,7 @@ public class MyCrawler {
     @RequestMapping("/firstTest")
     public String  myfirstTest() throws InterruptedException {
 //        MyCrawler crawler = new MyCrawler();
-        crawling(new String[]{"http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2016/index.html"});
+        crawling(new String[]{"http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2019/index.html"});
 
         return "success";
     }
