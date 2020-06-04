@@ -3,6 +3,7 @@ package com.pyc.demo.util;
 
 import com.pyc.demo.page.Page;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +27,10 @@ public class FileTool {
         //去除 http://
         url = url.substring(7);
         //text/html 类型
-        if (contentType.indexOf("html") != -1) {
+        if (StringUtils.isBlank(contentType)) {
+            contentType = "text/html";
+        }
+        if (contentType.contains("html")) {
             url = url.replaceAll("[\\?/:*|<>\"]", "_") + ".html";
             return url;
         }

@@ -4,6 +4,7 @@ import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,7 +45,15 @@ public class RequestAndResponseTool {
             }
             // 4.处理 HTTP 响应内容
             byte[] responseBody = getMethod.getResponseBody();// 读取为字节 数组
-            String contentType = getMethod.getResponseHeader("Content-Type").getValue(); // 得到当前返回类型
+            Header responseHeader = getMethod.getResponseHeader("Content-Type");
+            String contentType = null;
+            if (responseHeader != null) {
+                contentType = responseHeader.getValue();
+            }
+            if (StringUtils.isNotBlank(contentType)) {
+                contentType = "text/html";
+            }
+             // 得到当前返回类型
             page = new Page(responseBody,url,contentType); //封装成为页面
         } catch (HttpException e) {
             // 发生致命的异常，可能是协议不对或者返回的内容有问题
