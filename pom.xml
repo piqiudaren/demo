@@ -107,11 +107,12 @@
 		</dependency>
     </dependencies>
 	<build>
+		<finalName>demo</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -121,7 +122,30 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
-        </plugins>
+			<!-- docker的maven插件，官网：https://github.com/spotify/docker-maven-plugin
+            -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.13</version>
+				<configuration>
+					<imageName>1.117.215.196:5000/${project.artifactId}:${project.version}
+					</imageName>
+					<baseImage>jdk1.8</baseImage>
+					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]
+					</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+					<dockerHost>http://1.117.215.196:2375</dockerHost>
+				</configuration>
+			</plugin>
+
+		</plugins>
 	</build>
 
 
