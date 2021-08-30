@@ -32,7 +32,9 @@ public class Page {
     public String getUrl(){return url ;}
     public String getContentType(){ return contentType ;}
     public byte[] getContent(){ return content ;}
-
+    public void setCharset(String charset){
+        this.charset = charset;
+    }
     /**
      * 返回网页的源码字符串
      *

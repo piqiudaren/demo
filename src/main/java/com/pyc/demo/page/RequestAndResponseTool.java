@@ -1,5 +1,7 @@
 package com.pyc.demo.page;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.http.HttpUtil;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -16,7 +18,7 @@ public class RequestAndResponseTool {
 
     private static final Logger logger = LogManager.getLogger(RequestAndResponseTool.class);
 
-    public static Page  sendRequstAndGetResponse(String url) throws InterruptedException {
+    public static Page  sendRequstAndGetResponsebak(String url) throws InterruptedException {
         long a = (long)(Math.random()*1000);
         Thread.sleep(a);
         Page page = null;
@@ -53,8 +55,10 @@ public class RequestAndResponseTool {
             if (StringUtils.isNotBlank(contentType)) {
                 contentType = "text/html";
             }
+            String result2= HttpUtil.get("https://www.baidu.com", CharsetUtil.CHARSET_UTF_8);
+
              // 得到当前返回类型
-            page = new Page(responseBody,url,contentType); //封装成为页面
+            page = new Page(result2.getBytes(CharsetUtil.CHARSET_UTF_8),url,contentType); //封装成为页面
         } catch (HttpException e) {
             // 发生致命的异常，可能是协议不对或者返回的内容有问题
             logger.error("错误url:"+url);
@@ -69,6 +73,29 @@ public class RequestAndResponseTool {
         } finally {
             // 释放连接
             getMethod.releaseConnection();
+        }
+        return page;
+    }
+
+
+
+    public static Page  sendRequstAndGetResponse(String url) throws InterruptedException {
+        long a = (long)(Math.random()*1000);
+        Thread.sleep(a);
+        Page page = null;
+        try {
+            String result2= HttpUtil.get(url, CharsetUtil.CHARSET_UTF_8);
+            // 得到当前返回类型
+            page = new Page(result2.getBytes(CharsetUtil.CHARSET_UTF_8),url,"text/html"); //封装成为页面
+            page.setCharset("utf-8");
+        } catch (Exception e) {
+
+            // 发生致命的异常，可能是协议不对或者返回的内容有问题
+            logger.error("错误url:"+url);
+            logger.error("Please check your provided http address!");
+            logger.error("网络异常错误url:"+url);
+            e.printStackTrace();
+            return  sendRequstAndGetResponse(url);
         }
         return page;
     }
